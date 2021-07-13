@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<script>
+  const user = {
+    name: "袁华",
+    age: 20,
+    wife: {
+      name: "秋雅",
+      age: 19
+    }
+  }
+
+  //参数1: user -> target目标对象
+  //参数2: handler -> 处理器对象 用来监视数据及数据的操作
+  const proxyUser = new Proxy(user, {
+    get(target,prop){
+      console.log("get方法调用了")
+      return Reflect.get(target,prop)
+    },
+    //不仅是修改目标对象也可以添加新的属性值
+    set(target,prop,val){
+      console.log("set方法调用了")
+      return Reflect.set(user,prop,val)
+    },
+    //删除目标对象上的属性
+    deleteProperty(target, prop) {
+      console.log("delete方法调用了")
+      return Reflect.deleteProperty(target,prop)
+    }
+  })
+  //通过代理对象获取目标帝乡中的某个属性值
+  console.log(proxyUser.name)
+  //通过代理对象更新目标对象上的某个属性值
+  proxyUser.name = "夏洛"
+  console.log(user)
+  //通过代理对象向目标对象中添加一个新的属性
+  proxyUser.gender = "男"
+  console.log(user)
+  delete proxyUser.name
+  console.log(user)
+  //更新目标对象中的某个属性对象中的属性值
+  proxyUser.wife.name = "小花"
+</script>
+</body>
+</html>
